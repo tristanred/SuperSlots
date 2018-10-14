@@ -8,6 +8,9 @@ ASlotSymbol::ASlotSymbol()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    SpinProps.Speed = -10;
+    SpinProps.RotationAxis = FVector(0, 1, 0);
+
 }
 
 void ASlotSymbol::SpinSymbol(int targetSymbol)
@@ -25,8 +28,7 @@ void ASlotSymbol::SetSymbol(int targetSymbol)
 
 void ASlotSymbol::OnSpinTick()
 {
-    this->AddActorLocalRotation(FQuat(FVector(0, 1, 0), FMath::DegreesToRadians(-10)));
-
+    this->AddActorLocalRotation(FQuat(this->SpinProps.RotationAxis, FMath::DegreesToRadians(this->SpinProps.Speed)));
 }
 
 void ASlotSymbol::OnSpinEnded()

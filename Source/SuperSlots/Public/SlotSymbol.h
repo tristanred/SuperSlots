@@ -8,6 +8,18 @@
 
 #include "SlotSymbol.generated.h"
 
+USTRUCT(BlueprintType)
+struct FSlotSpinParameters
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere)
+    int Speed; // In degrees per second
+
+    UPROPERTY(EditAnywhere)
+    FVector RotationAxis;
+};
+
 UCLASS(Blueprintable)
 class SUPERSLOTS_API ASlotSymbol : public AActor
 {
@@ -26,6 +38,10 @@ public:
     bool isSpinning;
     int TargetSpinSymbol;
     float spinAnimationAccumulator;
+
+    UPROPERTY(EditAnywhere, Category = Slots)
+    FSlotSpinParameters SpinProps;
+
 
     UFUNCTION(BlueprintCallable)
     void SpinSymbol(int targetSymbol);
