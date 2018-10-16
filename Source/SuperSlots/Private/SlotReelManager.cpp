@@ -4,6 +4,8 @@
 
 #include "TimerManager.h"
 #include "Engine.h"
+#include "Framework/Slots/ReelManager.h"
+#include "Framework/Slots/SymbolSet.h"
 
 // Sets default values
 ASlotReelManager::ASlotReelManager()
@@ -15,13 +17,26 @@ ASlotReelManager::ASlotReelManager()
 
 void ASlotReelManager::Spin()
 {
+    this->RM->Spin();
 
+    int index = 0;
+    for (int i = 0; i < this->RM->Reels; i++)
+    {
+        for (int k = 0; k < this->RM->Rows; k++)
+        {
+            InstancedSlots[index]->SpinSymbol(this->RM->ReelSymbols[i][k]->id);
+            index++;
+        }
+    }
 }
 
 // Called when the game starts or when spawned
 void ASlotReelManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+    this->RM = new ReelManager(5, 3);
+    this->RM->CreateDefaultObjects();
 
     if (this->SlotObjectType != NULL)
     {
@@ -32,10 +47,11 @@ void ASlotReelManager::BeginPlay()
                 FTransform newCubeTranstorm = this->GetActorTransform();
 
                 ASlotSymbol* res = this->SpawnCube(SlotObjectType.Get(), this->GetActorTransform());
-                InstancedSlots.Add(res);
 
                 if (res == NULL)
                     continue;
+
+                InstancedSlots.Add(res);
 
                 res->AddActorLocalOffset(FVector(0, (i * 300) - 500, k * 300), false, nullptr, ETeleportType::TeleportPhysics);
             }
@@ -46,10 +62,7 @@ void ASlotReelManager::BeginPlay()
         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Did not set SlotObjectType :(");
     }
 
-    for (int i = 0; i < InstancedSlots.Num(); i++)
-    {
-        //InstancedSlots[i]->StartShuffle(20);
-    }
+    this->RM->Spin();
 }
 
 void ASlotReelManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -71,7 +84,7 @@ void ASlotReelManager::Tick(float DeltaTime)
 
 ASlotSymbol* ASlotReelManager::SpawnCube(UClass* symbolClass, FTransform trans)
 {
-    auto res = GetWorld()->SpawnActor<ASlotSymbol>(symbolClass, trans);
+    auto res = GetWorld()->SpawnActorDeferred<ASlotSymbol>(symbolClass, trans);
 
     if (res == NULL)
     {
@@ -79,6 +92,10 @@ ASlotSymbol* ASlotReelManager::SpawnCube(UClass* symbolClass, FTransform trans)
 
         return NULL;
     }
+
+    res->AssignSymbolTexturesMap(this->SymbolMaterials);
+
+    UGameplayStatics::FinishSpawningActor(res, trans);
 
     return res;
 }

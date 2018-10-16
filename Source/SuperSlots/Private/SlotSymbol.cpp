@@ -2,6 +2,11 @@
 
 #include "SlotSymbol.h"
 
+#include "Components/MeshComponent.h"
+#include "Classes/Engine/World.h"
+#include "Engine/Public/TimerManager.h"
+#include "Classes/GameFramework/Actor.h"
+
 // Sets default values
 ASlotSymbol::ASlotSymbol()
 {
@@ -10,7 +15,16 @@ ASlotSymbol::ASlotSymbol()
 
     SpinProps.Speed = -10;
     SpinProps.RotationAxis = FVector(0, 1, 0);
+    isSpinning = false;
+    
+    CurrentSymbol = -1;
+    TargetSpinSymbol = -1;
+    spinAnimationAccumulator = 0;
+}
 
+void ASlotSymbol::AssignSymbolTexturesMap(TMap<int, UMaterial*> map)
+{
+    this->SymbolTextureMap = map;
 }
 
 void ASlotSymbol::SpinSymbol(int targetSymbol)
@@ -23,7 +37,22 @@ void ASlotSymbol::SpinSymbol(int targetSymbol)
 
 void ASlotSymbol::SetSymbol(int targetSymbol)
 {
+    if(CurrentSymbol == targetSymbol)
+        return;
 
+    UMaterial** result = this->SymbolTextureMap.Find(targetSymbol);
+
+    if(result != NULL)
+    {
+        UMeshComponent* res = (UMeshComponent*)this->GetComponentByClass(UMeshComponent::StaticClass());
+
+        if(res != NULL)
+        {
+            res->SetMaterial(0, *result);
+
+            CurrentSymbol = targetSymbol;
+        }
+    }
 }
 
 void ASlotSymbol::OnSpinTick()
@@ -47,7 +76,7 @@ void ASlotSymbol::BeginPlay()
 
     OriginalRotation = this->GetActorQuat();
 
-    this->SpinSymbol(0);
+    //this->SpinSymbol(0);
 }
 
 // Called every frame

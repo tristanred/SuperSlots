@@ -7,6 +7,8 @@
 #include "SlotSymbol.h"
 #include "SlotReelManager.generated.h"
 
+class ReelManager;
+
 UCLASS(Blueprintable)
 class SUPERSLOTS_API ASlotReelManager : public AActor
 {
@@ -25,6 +27,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Slots)
     TSubclassOf<ASlotSymbol> SlotObjectType;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Slots)
+    TMap<int, UMaterial*> SymbolMaterials;
+
     virtual void Spin();
 
 protected:
@@ -38,6 +43,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+
+    ReelManager* RM;
 
     UFUNCTION()
     ASlotSymbol* SpawnCube(UClass* symbolClass, FTransform trans);

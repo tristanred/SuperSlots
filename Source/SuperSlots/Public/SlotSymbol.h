@@ -29,8 +29,10 @@ public:
 	// Sets default values for this actor's properties
 	ASlotSymbol();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Slots)
-    TArray<UMaterial*> SymbolTextures;
+    int CurrentSymbol;
+
+    UFUNCTION(BlueprintCallable)
+    void AssignSymbolTexturesMap(TMap<int, UMaterial*> map);
 
     // ===== Spinning =====
     FQuat OriginalRotation;
@@ -42,7 +44,6 @@ public:
     UPROPERTY(EditAnywhere, Category = Slots)
     FSlotSpinParameters SpinProps;
 
-
     UFUNCTION(BlueprintCallable)
     void SpinSymbol(int targetSymbol);
 
@@ -53,14 +54,15 @@ public:
     void OnSpinEnded();
     // ===== Spinning =====
 
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+private:
 
-	
-	
+    UPROPERTY()
+    TMap<int, UMaterial*> SymbolTextureMap;
 };
