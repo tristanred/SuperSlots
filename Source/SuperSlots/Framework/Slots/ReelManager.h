@@ -33,6 +33,10 @@ public:
 
     SymbolSet* Symbols;
 
+    LineWin** GetLineWins();
+    ScatterWin* GetScatterWins();
+    int GetWonAmount();
+
     unsigned int reelManagerSeed;
 
     // Initialisation Methods
@@ -55,4 +59,13 @@ public:
     LineWin* CalculateLineWin(Symbol** lineSymbols);
 
     ScatterWin* CalculateScatterWins();
+
+private:
+    void CleanWins();
+
+    // Previous result information
+    LineWin** LineWins;
+    ScatterWin* ScatterWins;
+    int wonAmount;
+
 };

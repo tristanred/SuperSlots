@@ -38,6 +38,9 @@ protected:
 
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+
+    ASlotSymbol* GetSymbol(int reel, int row);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -51,5 +54,4 @@ private:
 
     UPROPERTY()
     TArray<ASlotSymbol*> InstancedSlots;
-	
 };

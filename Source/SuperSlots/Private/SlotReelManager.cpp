@@ -6,6 +6,7 @@
 #include "Engine.h"
 #include "Framework/Slots/ReelManager.h"
 #include "Framework/Slots/SymbolSet.h"
+#include "Framework/Slots/LineSet.h"
 
 // Sets default values
 ASlotReelManager::ASlotReelManager()
@@ -18,6 +19,7 @@ ASlotReelManager::ASlotReelManager()
 void ASlotReelManager::Spin()
 {
     this->RM->Spin();
+    this->RM->CalculateWins();
 
     int index = 0;
     for (int i = 0; i < this->RM->Reels; i++)
@@ -26,6 +28,30 @@ void ASlotReelManager::Spin()
         {
             InstancedSlots[index]->SpinSymbol(this->RM->ReelSymbols[i][k]->id);
             index++;
+        }
+    }
+
+    LineWin** winningLine = this->RM->GetLineWins();
+    if (winningLine != NULL)
+    {
+        for (int i = 0; i < this->RM->Lines->PatternsCount; i++)
+        {
+            // Check if this line wins
+            if (winningLine[i] != NULL)
+            {
+                int winLineIndex = winningLine[i]->winLineIndex;
+
+                int* offsets = this->RM->Lines->LinePatterns[winLineIndex];
+
+                for (int k = 0; k < this->RM->Reels; k++)
+                {
+                    ASlotSymbol* winSymbol = this->GetSymbol(k, offsets[k]);
+
+
+                    FString msg = FString::Printf(TEXT("Winning Sym on %d, %d"), k, offsets[k]);
+                    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, msg);
+                }
+            }
         }
     }
 }
@@ -73,6 +99,34 @@ void ASlotReelManager::EndPlay(const EEndPlayReason::Type EndPlayReason)
     }
 
     InstancedSlots.Empty();
+
+    if (this->RM != NULL)
+    {
+        //delete(this->RM);
+    }
+}
+
+ASlotSymbol* ASlotReelManager::GetSymbol(int reel, int row)
+{
+    int seachIndex = 0;
+
+    // New idea, the bullshit search algorithm. Optimized for speed !
+    // Not speed of execution but speed of development.
+    // TODO : Fixme.
+    for (int i = 0; i < this->RM->Reels; i++)
+    {
+        for (int k = 0; k < this->RM->Rows; k++)
+        {
+            if (reel == i && row == k)
+            {
+                return this->InstancedSlots[seachIndex];
+            }
+
+            seachIndex++;
+        }
+    }
+
+    return NULL;
 }
 
 // Called every frame
