@@ -23,13 +23,18 @@ void ASpinHitter::BeginPlay()
 void ASpinHitter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ASpinHitter::NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Hit !");
 
-    this->Linked->Spin();
+    if (this->LinkedReelMan != NULL)
+    {
+        this->LinkedReelMan->Spin();
+    }
+    else
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, "No ReelManager linked to this SpinHitter.");
+    }
 }
 

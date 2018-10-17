@@ -19,8 +19,8 @@ public:
     UPROPERTY(VisibleDefaultsOnly, Category = Slots)
     class UMeshComponent* GraphicalComponent;
 
-    UPROPERTY(EditAnywhere)
-    ASlotReelManager* Linked;
+    UPROPERTY(EditInstanceOnly, Category = Slots)
+    ASlotReelManager* LinkedReelMan;
 
 protected:
 	// Called when the game starts or when spawned
