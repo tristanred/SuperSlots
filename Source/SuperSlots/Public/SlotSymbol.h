@@ -45,7 +45,7 @@ public:
     FSlotSpinParameters SpinProps;
 
     UFUNCTION(BlueprintCallable)
-    void SpinSymbol(int targetSymbol);
+    void SpinSymbol(int targetSymbol, float timeToSpin);
 
     UFUNCTION(BlueprintCallable)
     void SetSymbol(int targetSymbol);

@@ -47,6 +47,15 @@ public:
 
 private:
 
+    // Spin Animation
+    FTimerHandle spinningTimer;
+
+    float spinTime;
+
+
+    void OnSpinEnded();
+    // Spin Animation
+
     ReelManager* RM;
 
     UFUNCTION()

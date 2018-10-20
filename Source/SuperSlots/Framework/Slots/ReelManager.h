@@ -10,7 +10,7 @@ class Symbol;
 class LineWin;
 class ScatterWin;
 
-//#define FAKE_SPIN
+#define FAKE_SPIN
 
 class ReelManager
 {

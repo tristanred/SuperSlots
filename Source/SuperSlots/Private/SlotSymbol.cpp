@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SlotSymbol.h"
+#include "Public/SlotSymbol.h"
 
 #include "Components/MeshComponent.h"
 #include "Classes/Engine/World.h"
@@ -27,12 +27,12 @@ void ASlotSymbol::AssignSymbolTexturesMap(TMap<int, UMaterial*> map)
     this->SymbolTextureMap = map;
 }
 
-void ASlotSymbol::SpinSymbol(int targetSymbol)
+void ASlotSymbol::SpinSymbol(int targetSymbol, float timeToSpin)
 {
     this->isSpinning = true;
     this->TargetSpinSymbol = targetSymbol;
 
-    this->GetWorldTimerManager().SetTimer(this->spinningTimer, this, &ASlotSymbol::OnSpinEnded, 1.0f);
+    this->GetWorldTimerManager().SetTimer(this->spinningTimer, this, &ASlotSymbol::OnSpinEnded, timeToSpin);
 }
 
 void ASlotSymbol::SetSymbol(int targetSymbol)

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SlotReelManager.h"
+#include "Public/SlotReelManager.h"
 
 #include "TimerManager.h"
 #include "Engine.h"
@@ -14,6 +14,7 @@ ASlotReelManager::ASlotReelManager()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    spinTime = 3.0f;
 }
 
 void ASlotReelManager::Spin()
@@ -26,34 +27,12 @@ void ASlotReelManager::Spin()
     {
         for (int k = 0; k < this->RM->Rows; k++)
         {
-            InstancedSlots[index]->SpinSymbol(this->RM->ReelSymbols[i][k]->id);
+            InstancedSlots[index]->SpinSymbol(this->RM->ReelSymbols[i][k]->id, spinTime);
             index++;
         }
     }
 
-    LineWin** winningLine = this->RM->GetLineWins();
-    if (winningLine != NULL)
-    {
-        for (int i = 0; i < this->RM->Lines->PatternsCount; i++)
-        {
-            // Check if this line wins
-            if (winningLine[i] != NULL)
-            {
-                int winLineIndex = winningLine[i]->winLineIndex;
-
-                int* offsets = this->RM->Lines->LinePatterns[winLineIndex];
-
-                for (int k = 0; k < this->RM->Reels; k++)
-                {
-                    ASlotSymbol* winSymbol = this->GetSymbol(k, offsets[k]);
-
-
-                    FString msg = FString::Printf(TEXT("Winning Sym on %d, %d"), k, offsets[k]);
-                    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, msg);
-                }
-            }
-        }
-    }
+    this->GetWorldTimerManager().SetTimer(this->spinningTimer, this, &ASlotReelManager::OnSpinEnded, spinTime);
 }
 
 // Called when the game starts or when spawned
@@ -134,6 +113,32 @@ void ASlotReelManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ASlotReelManager::OnSpinEnded()
+{
+    LineWin** winningLine = this->RM->GetLineWins();
+    if (winningLine != NULL)
+    {
+        for (int i = 0; i < this->RM->Lines->PatternsCount; i++)
+        {
+            // Check if this line wins
+            if (winningLine[i] != NULL)
+            {
+                int winLineIndex = winningLine[i]->winLineIndex;
+
+                int* offsets = this->RM->Lines->LinePatterns[winLineIndex];
+
+                for (int k = 0; k < this->RM->Reels; k++)
+                {
+                    ASlotSymbol* winSymbol = this->GetSymbol(k, offsets[k]);
+
+                    FString msg = FString::Printf(TEXT("Winning Sym on %d, %d"), k, offsets[k]);
+                    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, msg);
+                }
+            }
+        }
+    }
 }
 
 ASlotSymbol* ASlotReelManager::SpawnCube(UClass* symbolClass, FTransform trans)

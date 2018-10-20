@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SpinHitter.h"
+#include "Public/SpinHitter.h"
 
 
 // Sets default values
