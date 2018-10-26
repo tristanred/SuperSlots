@@ -4,9 +4,10 @@
 
 #include "TimerManager.h"
 #include "Engine.h"
-#include "Framework/Slots/ReelManager.h"
-#include "Framework/Slots/SymbolSet.h"
-#include "Framework/Slots/LineSet.h"
+
+#include "ReelManager.h"
+#include "SymbolSet.h"
+#include "LineSet.h"
 
 // Sets default values
 ASlotReelManager::ASlotReelManager()
