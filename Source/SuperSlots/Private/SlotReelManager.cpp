@@ -23,6 +23,8 @@ void ASlotReelManager::Spin()
     this->RM->Spin();
     this->RM->CalculateWins();
 
+    // Using a DLL probably won't work since we're passing pointers to and from DLL boundaries.
+
     int index = 0;
     for (int i = 0; i < this->RM->Reels; i++)
     {

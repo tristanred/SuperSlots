@@ -8,13 +8,12 @@ public class SuperSlots : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "SuperSlotsSupport" });
         
         //PublicAdditionalLibraries.Add(@"C:\Unreal_Projects\SuperSlots\Binaries\Win64\SUPERSLOTS-SUPPORT.lib");
-        PublicAdditionalLibraries.Add(ModuleDirectory + @"\..\..\ThirdParty\SuperSlotsSupport\Win64\SUPERSLOTS-SUPPORT_D.lib");
+        //PublicAdditionalLibraries.Add(ModuleDirectory + @"\..\..\ThirdParty\SuperSlotsSupport\Win64\SUPERSLOTS-SUPPORT_D.lib");
+        //PublicSystemIncludePaths.Add(ModuleDirectory + @"\..\..\ThirdParty\SuperSlotsSupport\include");
 
-        PublicSystemIncludePaths.Add(ModuleDirectory + @"\..\..\ThirdParty\SuperSlotsSupport\include");
-
-        PublicDefinitions.Add("SuperSlotsSupport_LOADDLL");
+        //PublicDefinitions.Add("SuperSlotsSupport_LOADDLL");
 	}
 }
